@@ -51,10 +51,17 @@
 
     private static void ViewProducts()
     {
-        Console.WriteLine("Inventory:");
-        foreach (var product in inventory)
+        if (inventory.Count == 0)
         {
+            Console.WriteLine("No inventory.");
+        }
+        else
+        {
+            Console.WriteLine("Inventory:");
+            foreach (var product in inventory)
+            {
             Console.WriteLine(product);
+            }
         }
     }
 
