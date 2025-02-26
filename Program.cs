@@ -4,7 +4,7 @@
 
     static void Main(string[] args)
     {
-        // Adding some products to the inventory
+        // Adding some example products to the inventory
         inventory.Add(new Product("Laptop", 999.99, 10));
         inventory.Add(new Product("Smartphone", 499.99, 25));
         inventory.Add(new Product("Tablet", 299.99, 15));
@@ -51,7 +51,6 @@
 
     private static void ViewProducts()
     {
-        // Displaying the inventory
         Console.WriteLine("Inventory:");
         foreach (var product in inventory)
         {
@@ -61,25 +60,92 @@
 
     private static void UpdateProduct()
     {
-        throw new NotImplementedException();
+        // Prompt for product name and validate input
+        Console.Write("Enter product name to update: ");
+        string name = Console.ReadLine();
+        var product = inventory.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+
+        // If product is found, prompt for new details
+        if (product != null)
+        {
+            Console.Write("Enter new price (leave blank to keep current price): ");
+            string priceInput = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(priceInput))
+            {
+                product.Price = double.Parse(priceInput);
+            }
+
+            Console.Write("Enter new stock quantity (leave blank to keep current quantity): ");
+            string stockInput = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(stockInput))
+            {
+                product.StockQuantity = int.Parse(stockInput);
+            }
+
+            Console.WriteLine("Product updated successfully.");
+        }
+        else
+        {
+            Console.WriteLine("Product not found.");
+        }
     }
 
     private static void RemoveProduct()
     {
-        throw new NotImplementedException();
+        // Prompt for product name and validate input
+        Console.Write("Enter product name to remove: ");
+        string name = Console.ReadLine();
+        var product = inventory.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+
+        // If product is found, confirm removal
+        if (product != null)
+        {
+            Console.Write("Are you sure you want to remove this product? (yes/no): ");
+            string confirmation = Console.ReadLine();
+            if (confirmation.Equals("yes", StringComparison.OrdinalIgnoreCase))
+            {
+                inventory.Remove(product);
+                Console.WriteLine("Product removed successfully.");
+            }
+            else
+            {
+                Console.WriteLine("Product removal canceled.");
+            }
+        }
+        else
+        {
+            Console.WriteLine("Product not found.");
+        }
     }
 
     private static void AddProduct()
     {
-        Console.Write("Enter product name: ");
-        string name = Console.ReadLine();
-        Console.Write("Enter product price: ");
-        double price = double.Parse(Console.ReadLine());
-        Console.Write("Enter stock quantity: ");
-        int stockQuantity = int.Parse(Console.ReadLine());
+        // Prompt for product name and validate input
+        string name;
+        do
+        {
+            Console.Write("Enter product name: ");
+            name = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                Console.WriteLine("Product name cannot be empty. Please enter a valid name.");
+            }
+        } while (string.IsNullOrWhiteSpace(name));
 
-        inventory.Add(new Product(name, price, stockQuantity));
-        Console.WriteLine("Product added successfully.");
+        // Check if the product already exists
+        if (inventory.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+        {
+            Console.WriteLine("A product with this name already exists in the inventory.");
+        }
+        else
+        {
+            Console.Write("Enter product price: ");
+            double price = double.Parse(Console.ReadLine());
+            Console.Write("Enter stock quantity: ");
+            int stockQuantity = int.Parse(Console.ReadLine());
+            inventory.Add(new Product(name, price, stockQuantity));
+            Console.WriteLine("Product added successfully.");
+        }
     }
 }
 
