@@ -1,62 +1,34 @@
-﻿public interface IAnimal
+﻿public class Person
 {
-    void Eat();
+    public string? Name { get; set; }
+    public int Age { get; set; }
+
+    public void Greet()
+    {
+        Console.WriteLine("Hello, my name is " + Name);
+    }
 }
 
 public class Program
 {
     public static void Main()
     {
-        List<Animal> animals = new List<Animal>();
-        animals.Add(new Dog());
-        animals.Add(new Cat());
+        Person person1 = new Person();
+        Person person2 = new Person();
+        Person person3 = new Person();
 
-        foreach (Animal animal in animals)
-        {
-            animal.MakeSound();
-            animal.Eat();
-        }
+        person1.Name = "John";
+        person1.Age = 30;
+        person2.Name = "Jane";
+        person2.Age = 25;
+        person3.Name = "Jack";
+        person3.Age = 40;
 
-
-    }
-}
-
-public class Animal : IAnimal
-{
-    public virtual void MakeSound()
-    {
-        Console.WriteLine("Animal makes a sound");
-    }
-    
-    public void Eat()
-    {
-        Console.WriteLine("Animal eats");
-    }
-}
-
-
-public class Dog : Animal
-{
-    public override void MakeSound()
-    {
-        Console.WriteLine("Dog barks");
-    }
-
-    public  void Eat()
-    {
-        Console.WriteLine("Dog eats");
-    }
-}
-
-public class Cat : Animal
-{
-    public override void MakeSound()
-    {
-        Console.WriteLine("Cat meows");
-    }
-
-    public  void Eat()
-    {
-        Console.WriteLine("Cat eats");
+        Console.WriteLine("Name: " + person1.Name + ", Age: " + person1.Age);
+        Console.WriteLine("Name: " + person2.Name + ", Age: " + person2.Age);
+        Console.WriteLine("Name: " + person3.Name + ", Age: " + person3.Age);
+        person1.Greet();
+        person2.Greet();
+        person3.Greet();
     }
 }
