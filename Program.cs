@@ -1,148 +1,159 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
 
-public class Program { 
-   
-    public static async Task Main()
+class LibraryManager
+{
+    static Dictionary<string, int> userBorrowedBookCount = new Dictionary<string, int>();
+    static Dictionary<string, List<string>> userBorrowedBookList = new Dictionary<string, List<string>>();
+
+    static void Main()
     {
-        string book1 = "";
-        string book2 = "";
-        string book3 = "";
-        string book4 = "";
-        string book5 = "";
-        
+        List<string> availableBooks = new List<string>(5);
         while (true)
         {
-            Console.WriteLine("Please select an option:");
-            Console.WriteLine("1. Add a book");
-            Console.WriteLine("2. Remove a book");
-            Console.WriteLine("3. Display all books");
-            Console.WriteLine("4. Exit");
-
-            string option;
-            int optionNumber;
-            do
+            Console.WriteLine("Would you like to add, remove, search for a book, borrow a book, return a book, or exit? (add/remove/search/borrow/return/exit)");
+            string action = Console.ReadLine().ToLower();
+            if (action == "add")
             {
-                Console.WriteLine("Enter 1-4:");
-                option = Console.ReadLine();
-            } while (!int.TryParse(option, out optionNumber) || optionNumber < 1 || optionNumber > 4);
-
-            switch (option)
+                AddBook(availableBooks);
+            }
+            else if (action == "remove")
             {
-                case "1":
-                    AddBook(ref book1, ref book2, ref book3, ref book4, ref book5);
-                    break;
-                case "2":
-                    RemoveBook(ref book1, ref book2, ref book3, ref book4, ref book5);
-                    break;
-                case "3":
-                    DisplayBooks(book1, book2, book3, book4, book5);
-                    break;
-                case "4":
-                    return;
-                default:
-                    Console.WriteLine("Invalid option.");
-                    break;
+                RemoveBook(availableBooks);
+            }
+            else if (action == "search")
+            {
+                SearchBook(availableBooks);
+            }
+            else if (action == "borrow")
+            {
+                BorrowBook(availableBooks);
+            }
+            else if (action == "return")
+            {
+                ReturnBook(availableBooks);
+            }
+            else if (action == "exit")
+            {
+                break;
+            }
+            else
+            {
+                Console.WriteLine("Invalid action. Please type 'add', 'remove', 'search', 'borrow', 'return', or 'exit'.");
+            }
+            // Display the list of books
+            Console.WriteLine("Available books:");
+            foreach (string book in availableBooks)
+            {
+                Console.WriteLine(book);
             }
         }
+    }
 
-
-        static void AddBook(ref string book1, ref string book2, ref string book3, ref string book4, ref string book5)
+    static void AddBook(List<string> availableBooks)
+    {
+        if (availableBooks.Count >= 5)
         {
-            Console.WriteLine("Please enter a book title:");
+            Console.WriteLine("The library is full. No more books can be added.");
+        }
+        else
+        {
+            Console.WriteLine("Enter the title of the book to add:");
             string newBook = Console.ReadLine();
-
-            if (string.IsNullOrEmpty(book1))
-            {
-                book1 = newBook;
-            }
-            else if (string.IsNullOrEmpty(book2))
-            {
-                book2 = newBook;
-            }
-            else if (string.IsNullOrEmpty(book3))
-            {
-                book3 = newBook;
-            }
-            else if (string.IsNullOrEmpty(book4))
-            {
-                book4 = newBook;
-            }
-            else if (string.IsNullOrEmpty(book5))
-            {
-                book5 = newBook;
-            }
-            else
-            {
-                Console.WriteLine("All book slots are full.");
-            }
+            availableBooks.Add(newBook);
         }
+    }
 
-
-        static void RemoveBook(ref string book1, ref string book2, ref string book3, ref string book4, ref string book5)
+    static void RemoveBook(List<string> availableBooks)
+    {
+        if (availableBooks.Count == 0)
         {
-            if (string.IsNullOrEmpty(book1) && string.IsNullOrEmpty(book2) && string.IsNullOrEmpty(book3) && string.IsNullOrEmpty(book4) && string.IsNullOrEmpty(book5))
-            {
-                Console.WriteLine("There are no books to remove.");
-                return;
-            }
-            Console.WriteLine("Please enter the title of the book you want to remove:");
+            Console.WriteLine("The library is empty. No books to remove.");
+        }
+        else
+        {
+            Console.WriteLine("Enter the title of the book to remove:");
             string bookToRemove = Console.ReadLine();
-
-            if (book1 == bookToRemove)
+            if (availableBooks.Remove(bookToRemove))
             {
-            book1 = "";
-            Console.WriteLine("Book removed.");
-            }
-            else if (book2 == bookToRemove)
-            {
-            book2 = "";
-            Console.WriteLine("Book removed.");
-            }
-            else if (book3 == bookToRemove)
-            {
-            book3 = "";
-            Console.WriteLine("Book removed.");
-            }
-            else if (book4 == bookToRemove)
-            {
-            book4 = "";
-            Console.WriteLine("Book removed.");
-            }
-            else if (book5 == bookToRemove)
-            {
-            book5 = "";
-            Console.WriteLine("Book removed.");
+                Console.WriteLine("Book removed.");
             }
             else
             {
-            Console.WriteLine("Book not found.");
+                Console.WriteLine("Book not found.");
             }
         }
+    }
 
-        static void DisplayBooks(string book1, string book2, string book3, string book4, string book5)
+    static void SearchBook(List<string> availableBooks)
+    {
+        Console.WriteLine("Enter the title of the book to search:");
+        string bookToSearch = Console.ReadLine();
+        if (availableBooks.Contains(bookToSearch))
         {
-            Console.WriteLine("List of books:");
-            if (!string.IsNullOrEmpty(book1))
-            {
-                Console.WriteLine(book1);
-            }
-            if (!string.IsNullOrEmpty(book2))
-            {
-                Console.WriteLine(book2);
-            }
-            if (!string.IsNullOrEmpty(book3))
-            {
-                Console.WriteLine(book3);
-            }
-            if (!string.IsNullOrEmpty(book4))
-            {
-                Console.WriteLine(book4);
-            }
-            if (!string.IsNullOrEmpty(book5))
-            {
-                Console.WriteLine(book5);
-            }
+            Console.WriteLine("The book is available.");
+        }
+        else
+        {
+            Console.WriteLine("The book is not in the collection.");
+        }
+    }
+
+    static void BorrowBook(List<string> availableBooks)
+    {
+        Console.WriteLine("Enter your name:");
+        string userName = Console.ReadLine();
+        if (userBorrowedBookCount.ContainsKey(userName) && userBorrowedBookCount[userName] >= 3)
+        {
+            Console.WriteLine("You have already borrowed 3 books. Please return a book before borrowing a new one.");
+            return;
         }
 
+        Console.WriteLine("Enter the title of the book to borrow:");
+        string bookToBorrow = Console.ReadLine();
+        if (availableBooks.Contains(bookToBorrow))
+        {
+            availableBooks.Remove(bookToBorrow);
+            if (userBorrowedBookCount.ContainsKey(userName))
+            {
+                userBorrowedBookCount[userName]++;
+                userBorrowedBookList[userName].Add(bookToBorrow);
+            }
+            else
+            {
+                userBorrowedBookCount[userName] = 1;
+                userBorrowedBookList[userName] = new List<string> { bookToBorrow };
+            }
+            Console.WriteLine("Book borrowed.");
+        }
+        else
+        {
+            Console.WriteLine("Book not found.");
+        }
+    }
+
+    static void ReturnBook(List<string> availableBooks)
+    {
+        Console.WriteLine("Enter your name:");
+        string userName = Console.ReadLine();
+        if (!userBorrowedBookCount.ContainsKey(userName) || userBorrowedBookCount[userName] == 0)
+        {
+            Console.WriteLine("You have no borrowed books to return.");
+            return;
+        }
+
+        Console.WriteLine("Enter the title of the book to return:");
+        string bookToReturn = Console.ReadLine();
+        if (userBorrowedBookList[userName].Contains(bookToReturn))
+        {
+            availableBooks.Add(bookToReturn);
+            userBorrowedBookCount[userName]--;
+            userBorrowedBookList[userName].Remove(bookToReturn);
+            Console.WriteLine("Book returned.");
+        }
+        else
+        {
+            Console.WriteLine("You did not borrow this book.");
+        }
     }
 }
